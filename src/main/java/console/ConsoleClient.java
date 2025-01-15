@@ -27,8 +27,8 @@ import java.util.List;
 	    // Token de sesión
 	    private String token;
 	    // Correo y contraseña predeterminados
-	    private String correoPorDefecto = "usuario@ejemplo.com";
-	    private String contraseñaPorDefecto = "ContraseñaSegura2023";
+	    private String correoPorDefecto = "manu@deusto.es";
+	    private String contraseñaPorDefecto = "pass";
 
 	    private static final Logger logger = LoggerFactory.getLogger(ConsoleClient.class);
 

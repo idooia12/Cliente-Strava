@@ -83,7 +83,27 @@ public class RestTemplateServiceProxy {
     }
 	
 	// --> Reto Controller
-	
+	public void crearReto(String token, String nombre, LocalDate fechaInicio, LocalDate fechaFin, int objetivo, String deporte) {
+	    String url = apiBaseUrl + "/retos/crear" +
+	                 "?Nombre=" + nombre +
+	                 "&Fecha%20de%20Inicio=" + fechaInicio +
+	                 "&Fecha%20de%20Fin=" + fechaFin +
+	                 "&Objetivo%20del%20Reto=" + objetivo +
+	                 "&Deporte=" + deporte;
+
+	    try {
+	        restTemplate.postForObject(url, token, Void.class);
+	    } catch (HttpStatusCodeException e) {
+	        switch (e.getStatusCode().value()) {
+	            case 401 -> throw new RuntimeException("Token inválido");
+	            case 409 -> throw new RuntimeException("El reto ya existe");
+	            case 400 -> throw new RuntimeException("Datos del reto inválidos: " + e.getResponseBodyAsString());
+	            case 500 -> throw new RuntimeException("Error interno del servidor");
+	            default -> throw new RuntimeException("Error al crear el reto. Código de estado: " + e.getStatusCode());
+	        }
+	    }
+	}
+
 
 
 

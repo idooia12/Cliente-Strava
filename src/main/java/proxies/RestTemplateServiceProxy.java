@@ -25,7 +25,7 @@ public class RestTemplateServiceProxy {
     //--> Authorization Controller
     
     public String login(Credentials credentials) {
-        String url = apiBaseUrl + "/api/auth/login";
+        String url = "http://localhost:8082" + "/api/auth/login";
         
         try {
             return restTemplate.postForObject(url, credentials, String.class); // Lo mismo que HTTPreques

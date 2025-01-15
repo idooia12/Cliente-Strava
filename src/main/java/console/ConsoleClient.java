@@ -19,39 +19,29 @@ import java.util.List;
 	 * capa de servicio.
 	 */
 	public class ConsoleClient {
-	   private RestTemplateServiceProxy proxyServicio;
-		
-		public ConsoleClient(RestTemplateServiceProxy proxyServicio) {
-		        this.proxyServicio = proxyServicio;
-		 }
-	    // Token de sesión
-	    private String token;
-	    // Correo y contraseña predeterminados
-	    private String correoPorDefecto = "manu@deusto.es";
-	    private String contraseñaPorDefecto = "pass";
-
-	    private static final Logger logger = LoggerFactory.getLogger(ConsoleClient.class);
-
-	    public static void main(String[] args) {
-	        RestTemplateServiceProxy proxy = new RestTemplateServiceProxy(new org.springframework.web.client.RestTemplate());
-	        ConsoleClient cliente = new ConsoleClient(proxy);
-
-	        if (!cliente.iniciarSesion()) {
-	            logger.info("Saliendo de la aplicación por error en el inicio de sesión.");
-	            return;
-	        }
-	       
-	
-	    }
+	   private RestTemplateServiceProxy proxyServicio;	
+	   private String token;
+	   private String correoPorDefecto = "Manu@deusto.es";
+	   private String contraseñaPorDefecto = "pass";
+	   private static final Logger logger = LoggerFactory.getLogger(ConsoleClient.class);
+	    
+	   public ConsoleClient(RestTemplateServiceProxy proxyServicio) {
+	       this.proxyServicio = proxyServicio;
+	   }	
+	   public static void main(String[] args) {
+	       RestTemplateServiceProxy proxy = new RestTemplateServiceProxy(new org.springframework.web.client.RestTemplate());
+	       ConsoleClient cliente = new ConsoleClient(proxy);
+	       if (!cliente.iniciarSesion()) {
+	           logger.info("Saliendo de la aplicación por error en el inicio de sesión.");
+	           return;
+	       }
+	   }
 	    
 	    //Sesiones
 	    public boolean iniciarSesion() {
 	        try {
-	            Credentials credenciales = new Credentials(correoPorDefecto, contraseñaPorDefecto);
-
-	            token = proxyServicio.login(credenciales);
+	            token = proxyServicio.login(correoPorDefecto, contraseñaPorDefecto);
 	            logger.info("Inicio de sesión exitoso. Token: {}", token);
-
 	            return true;
 	        } catch (RuntimeException e) {
 	            logger.error("Error al iniciar sesión: {}", e.getMessage());

@@ -1,8 +1,12 @@
 package proxies;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -14,9 +18,13 @@ import data.*;
 public class RestTemplateServiceProxy {
 	
     private final RestTemplate restTemplate;
+    /*
     @Value("${api.base.url}")
     private String apiBaseUrl; //Configurada en application.properties
-    
+    */
+    private final String apiBaseUrl = "http://localhost:8082";
+    private static final Logger logger = LoggerFactory.getLogger(RestTemplateServiceProxy.class);
+
     public RestTemplateServiceProxy(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -24,12 +32,18 @@ public class RestTemplateServiceProxy {
     
     //--> Authorization Controller
     
-    public String login(Credentials credentials) {
-        String url = "http://localhost:8082" + "/api/auth/login";
-        
+    public String login(String email, String password) {
+       String url = apiBaseUrl + "/api/auth/login?Email=" + email + "&Password=" + password;
+
+        logger.info("URL: " + url);
         try {
-            return restTemplate.postForObject(url, credentials, String.class); // Lo mismo que HTTPreques
+            String token = restTemplate.postForObject(url,null, String.class);
+            logger.info("Token recibido");
+            return token;
         } catch (HttpStatusCodeException e) {
+            logger.error("Error al iniciar sesión: Código {}, Respuesta: {}", 
+                    e.getStatusCode(), 
+                    e.getResponseBodyAsString());
             switch (e.getStatusCode().value()) {
                 case 401 -> throw new RuntimeException("Login failed: Invalid credentials.");
                 default -> throw new RuntimeException("Login failed: " + e.getStatusText());

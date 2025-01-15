@@ -40,8 +40,7 @@ public class SwingClientController {
      */
     public boolean login(String email, String password) {
         try {
-            Credentials credentials = new Credentials(email, password);
-            token = serviceProxy.login(credentials);
+            token = serviceProxy.login(email, password);
             return true;
         } catch (RuntimeException e) {
             throw new RuntimeException("Error al iniciar sesión: " + e.getMessage());

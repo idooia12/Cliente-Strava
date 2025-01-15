@@ -18,9 +18,24 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Task to run the console client
+task runConsoleClient(type: JavaExec) {
+    group = 'application'
+    description = 'Run the Console Client'
+    mainClass = 'console.ConsoleClient'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+// Spring Boot configuration, defaults to running the web client
+bootRun {
+    mainClass.set("web.WebClientController")
 }
 
 tasks.named('test') {

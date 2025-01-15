@@ -1,5 +1,6 @@
 package proxies;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ public class RestTemplateServiceProxy {
 	
     private final RestTemplate restTemplate;
     @Value("${api.base.url}")
-    private String apiBaseUrl;
+    private String apiBaseUrl; //Configurada en application.properties
     
     public RestTemplateServiceProxy(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -63,8 +64,26 @@ public class RestTemplateServiceProxy {
                 default -> throw new RuntimeException("Fallo al buscar entrenamientos: " + e.getStatusText());
             }
         }
-    	
     }
+    
+	public void crearEntrenamiento(String token, String titulo, String deporte, LocalDate fechaInicio, int duracion) {
+		String url = apiBaseUrl + "/entrenamientos/crear";
+
+		try {
+            Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, fechaInicio, duracion);
+            restTemplate.postForObject(url, entrenamiento, Void.class);
+        } catch (HttpStatusCodeException e) {
+            switch (e.getStatusCode().value()) {
+                case 400 -> throw new RuntimeException("Datos de entrenamiento inválidos.");
+                case 401 -> throw new RuntimeException("Token inválido. No autorizado.");
+                case 500 -> throw new RuntimeException("Error interno al crear el entrenamiento.");
+                default -> throw new RuntimeException("Error desconocido: " + e.getStatusText());
+            }
+        }
+    }
+	
+	// --> Reto Controller
+	
 
 
 

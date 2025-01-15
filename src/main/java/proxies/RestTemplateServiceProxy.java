@@ -25,7 +25,7 @@ public class RestTemplateServiceProxy {
     //--> Authorization Controller
     
     public String login(Credentials credentials) {
-        String url = apiBaseUrl + "/auth/login";
+        String url = apiBaseUrl + "/api/auth/login";
         
         try {
             return restTemplate.postForObject(url, credentials, String.class); // Lo mismo que HTTPreques
@@ -38,7 +38,7 @@ public class RestTemplateServiceProxy {
     }
         
     public void logout(String token) {
-        String url = apiBaseUrl + "/auth/logout";
+        String url = apiBaseUrl + "/api/auth/logout";
         
         try {
             restTemplate.postForObject(url, token, Void.class);
@@ -55,7 +55,7 @@ public class RestTemplateServiceProxy {
     // --> Entrenamiento Controller
     @SuppressWarnings("unchecked")
 	public List<Entrenamiento> getAllEntrenamientos(String token) {
-        String url = apiBaseUrl + "/entrenamientos";
+        String url = apiBaseUrl + "/api/entrenamientos";
         try {
             return restTemplate.getForObject(url, List.class);
         } catch (HttpStatusCodeException e) {
@@ -67,7 +67,7 @@ public class RestTemplateServiceProxy {
     }
     
 	public void crearEntrenamiento(String token, String titulo, String deporte, LocalDate fechaInicio, int duracion) {
-		String url = apiBaseUrl + "/entrenamientos/crear";
+		String url = apiBaseUrl + "/api/entrenamientos/crear";
 
 		try {
             Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, fechaInicio, duracion);
@@ -84,7 +84,7 @@ public class RestTemplateServiceProxy {
 	
 	// --> Reto Controller
 	public void crearReto(String token, String nombre, LocalDate fechaInicio, LocalDate fechaFin, int objetivo, String deporte) {
-	    String url = apiBaseUrl + "/retos/crear" +
+	    String url = apiBaseUrl + "/api/retos/crear" +
 	                 "?Nombre=" + nombre +
 	                 "&Fecha%20de%20Inicio=" + fechaInicio +
 	                 "&Fecha%20de%20Fin=" + fechaFin +
@@ -105,7 +105,7 @@ public class RestTemplateServiceProxy {
 	
 	 @SuppressWarnings("unchecked")
 	    public List<Reto> obtenerRetosActivos(String token) {
-	        String url = apiBaseUrl + "/retos/activos";
+	        String url = apiBaseUrl + "/api/retos/activos";
 	        try {
 	            return restTemplate.getForObject(
 	                    url,
@@ -122,7 +122,7 @@ public class RestTemplateServiceProxy {
 	    }
 	 
 	 public void aceptarReto(String token, String nombreReto) {
-	        String url = apiBaseUrl + "/retos/aceptar/" + nombreReto;
+	        String url = apiBaseUrl + "/api/retos/aceptar/" + nombreReto;
 	        try {
 	            restTemplate.postForObject(url, token, Void.class);
 	        } catch (HttpStatusCodeException e) {
@@ -136,7 +136,7 @@ public class RestTemplateServiceProxy {
 	 
 	 @SuppressWarnings("unchecked")
 	    public List<Reto> consultarRetosAceptados(String token) {
-	        String url = apiBaseUrl + "/retos/aceptados";
+	        String url = apiBaseUrl + "/api/retos/aceptados";
 	        try {
 	            return restTemplate.getForObject(
 	                    url,

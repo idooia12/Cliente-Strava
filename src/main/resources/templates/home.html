@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Strava Web Client</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f7f7f7;
+        }
+        .navbar {
+            background-color: #ff4c00;
+        }
+        .navbar a {
+            color: white;
+        }
+        .header {
+            background-color: #ff4c00;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+        .btn-custom {
+            background-color: #ff4c00;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header with logo and name -->
+<header class="header text-center">
+    <h1><i class="fa-solid fa-diamond"></i> Strava Web Client</h1>
+</header>
+
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Strava</a>
+        <div class="d-flex">
+            <a href="/logout" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div class="container">
+
+    <!-- Entrenamientos Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Mis Entrenamientos</h2>
+            <p>Consulta tus entrenamientos registrados.</p>
+            <a href="/entrenamientos" class="btn btn-primary btn-custom"><i class="fas fa-running me-2"></i> Ver Entrenamientos</a>
+        </div>
+    </div>
+
+    <!-- Crear Entrenamiento Action -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Crear Entrenamiento</h2>
+            <p>Registra un nuevo entrenamiento.</p>
+            <a href="/entrenamientos/crear" class="btn btn-warning btn-custom"><i class="fas fa-plus-circle me-2"></i> Crear Entrenamiento</a>
+        </div>
+    </div>
+
+    <!-- Retos Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Mis Retos</h2>
+            <p>Consulta los retos activos y aceptados.</p>
+            <a href="/retos" class="btn btn-info btn-custom"><i class="fas fa-trophy me-2"></i> Ver Retos</a>
+        </div>
+    </div>
+
+    <!-- Crear Reto Action -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Crear Reto</h2>
+            <p>Inicia un nuevo reto y compite con otros.</p>
+            <a href="/retos/crear" class="btn btn-danger btn-custom"><i class="fas fa-medal me-2"></i> Crear Reto</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>Strava Web Client - Proyecto para la asignatura <strong>Diseño de Software</strong>, Universidad de Deusto (2024).</p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

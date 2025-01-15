@@ -1,5 +1,5 @@
 package data;
 
-public class Usuario {
+public record Usuario() {
 
 }

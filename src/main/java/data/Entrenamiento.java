@@ -1,5 +1,5 @@
 package data;
 
-public class Entrenamiento {
+public record Entrenamiento() {
 
 }

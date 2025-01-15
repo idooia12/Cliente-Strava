@@ -90,7 +90,6 @@ public class RestTemplateServiceProxy {
 	                 "&Fecha%20de%20Fin=" + fechaFin +
 	                 "&Objetivo%20del%20Reto=" + objetivo +
 	                 "&Deporte=" + deporte;
-
 	    try {
 	        restTemplate.postForObject(url, token, Void.class);
 	    } catch (HttpStatusCodeException e) {
@@ -103,8 +102,53 @@ public class RestTemplateServiceProxy {
 	        }
 	    }
 	}
-
-
-
-
+	
+	 @SuppressWarnings("unchecked")
+	    public List<Reto> obtenerRetosActivos(String token) {
+	        String url = apiBaseUrl + "/retos/activos";
+	        try {
+	            return restTemplate.getForObject(
+	                    url,
+	                    List.class,
+	                    token
+	            );
+	        } catch (HttpStatusCodeException e) {
+	            switch (e.getStatusCode().value()) {
+	                case 401 -> throw new RuntimeException("Token inválido");
+	                case 204 -> throw new RuntimeException("No hay retos activos");
+	                default -> throw new RuntimeException("Error al obtener retos activos: " + e.getStatusText());
+	            }
+	        }
+	    }
+	 
+	 public void aceptarReto(String token, String nombreReto) {
+	        String url = apiBaseUrl + "/retos/aceptar/" + nombreReto;
+	        try {
+	            restTemplate.postForObject(url, token, Void.class);
+	        } catch (HttpStatusCodeException e) {
+	            switch (e.getStatusCode().value()) {
+	                case 401 -> throw new RuntimeException("Token inválido");
+	                case 404 -> throw new RuntimeException("Reto no encontrado");
+	                default -> throw new RuntimeException("Error al aceptar el reto: " + e.getStatusText());
+	            }
+	        }
+	    }
+	 
+	 @SuppressWarnings("unchecked")
+	    public List<Reto> consultarRetosAceptados(String token) {
+	        String url = apiBaseUrl + "/retos/aceptados";
+	        try {
+	            return restTemplate.getForObject(
+	                    url,
+	                    List.class,
+	                    token
+	            );
+	        } catch (HttpStatusCodeException e) {
+	            switch (e.getStatusCode().value()) {
+	                case 401 -> throw new RuntimeException("Token inválido");
+	                case 204 -> throw new RuntimeException("No hay retos aceptados");
+	                default -> throw new RuntimeException("Error al consultar retos aceptados: " + e.getStatusText());
+	            }
+	        }
+	    }
 }

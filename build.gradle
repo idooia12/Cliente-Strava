@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'application'
 	id 'org.springframework.boot' version '3.4.1'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -20,9 +21,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 // Task to run the console client
@@ -33,11 +32,14 @@ task runConsoleClient(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-// Spring Boot configuration, defaults to running the web client
-bootRun {
-    mainClass.set("web.WebClientController")
+task runWebClient(type: JavaExec) {
+    group = 'application'
+    description = 'Run the Web Client'
+    mainClass = 'web.WebClientApplication'
+    classpath = sourceSets.main.runtimeClasspath
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+// Spring Boot configuration, defaults to running the web client
+bootRun {
+    mainClass.set("com.example.demo.ClienteStravaApplication")
 }

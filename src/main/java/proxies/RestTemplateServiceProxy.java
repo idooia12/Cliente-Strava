@@ -1,7 +1,6 @@
 package proxies;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.net.URLEncoder;import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 

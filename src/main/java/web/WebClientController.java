@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import data.Entrenamiento;
+import data.Reto; // Asegúrate de importar la clase Reto
 import proxies.RestTemplateServiceProxy;
 
 @Controller
@@ -100,6 +101,38 @@ public class WebClientController {
         }
     }
 
+    // Página para crear un nuevo reto
+    @GetMapping("/retos/crear")
+    public String getCrearRetoPage(@ModelAttribute("token") String token, Model model) {
+        if (token == null || token.isEmpty()) {
+            return "redirect:/login";
+        }
+        return "crearReto"; // Nombre de la plantilla para crear retos
+    }
+
+    // Procesa la creación de un reto
+    @PostMapping("/retos/crear")
+    public String createReto(@ModelAttribute("token") String token,
+                             @RequestParam("nombre") String nombre,
+                             @RequestParam("fechaInicio") LocalDate fechaInicio,
+                             @RequestParam("fechaFin") LocalDate fechaFin,
+                             @RequestParam("objetivo") int objetivo,
+                             @RequestParam("deporte") String deporte,
+                             Model model) {
+        if (token == null || token.isEmpty()) {
+            return "redirect:/login";
+        }
+
+        try {
+            Reto nuevoReto = new Reto(nombre, fechaInicio, fechaFin, objetivo, deporte);
+            restTemplateServiceProxy.crearReto(token, nombre, fechaInicio, fechaFin, objetivo, deporte); // Método en el proxy para guardar retos
+            return "redirect:/home";
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", "Error al crear el reto: " + e.getMessage());
+            return "crearReto";
+        }
+    }
+
     @GetMapping("/entrenamientos")
     public String showTrainings(Model model, @ModelAttribute("token") String token) {
         if (token == null || token.isEmpty()) {
@@ -115,7 +148,23 @@ public class WebClientController {
             return "home";
         }
     }
+    
+ // Página para ver los retos existentes
+    @GetMapping("/retos")
+    public String showRetos(Model model, @ModelAttribute("token") String token) {
+        if (token == null || token.isEmpty()) {
+            return "redirect:/login";
+        }
 
+        try {
+            List<Reto> retos = restTemplateServiceProxy.obtenerRetosActivos(token); // Llama al proxy para obtener los retos
+            model.addAttribute("retos", retos); // Agrega la lista de retos al modelo
+            return "retos"; // Nombre de la plantilla para mostrar los retos
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "No se pudieron cargar los retos: " + e.getMessage());
+            return "home"; // Redirige a home si ocurre un error
+        }
+    }
 
     // Cierra sesión
     @GetMapping("/logout")
@@ -124,3 +173,4 @@ public class WebClientController {
         return "redirect:/login";
     }
 }
+

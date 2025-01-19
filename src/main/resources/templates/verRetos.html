@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Retos Activos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f7f7f7;
+        }
+        .navbar {
+            background-color: #ff4c00;
+        }
+        .navbar a {
+            color: white;
+        }
+        .header {
+            background-color: #ff4c00;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .table thead {
+            background-color: #ff4c00;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header text-center">
+        <h1><i class="fas fa-trophy"></i> Retos Activos</h1>
+    </header>
+
+    <!-- Navigation bar -->
+	<nav class="navbar navbar-expand-lg navbar-light">
+	    <div class="container-fluid">
+	        <a class="navbar-brand" href="/home">Strava</a>
+	        <div class="d-flex">
+	            <a href="/logout" class="btn btn-danger">
+	                <i class="fas fa-sign-out-alt"></i> Logout
+	            </a>
+	        </div>
+	    </div>
+	</nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <h2 class="mb-4">Retos a los que puedes apuntarte</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Deporte</th>
+                    <th>Tipo de Reto</th>
+                    <th>Objetivo</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="reto, iterStat : ${retosActivos}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${reto.nombre}"></td>
+                    <td th:text="${reto.deporte}"></td>
+                    <td th:text="${reto.tipoReto}"></td>
+                    <td th:text="${reto.objetivo}"></td>
+                    <td th:text="${reto.fechaInicio}"></td>
+                    <td th:text="${reto.fechaFin}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center mt-5">
+        <p>Strava Web Client - Proyecto para la asignatura <strong>Diseño de Software</strong>, Universidad de Deusto (2024).</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -55,6 +55,7 @@ public class WebClientController { //Clase con todo el redireccionamiento y cont
         return "login";
     }
 
+    //LOGIN
     @PostMapping("/login")
     public String performLogin(@RequestParam("email") String email,
                                @RequestParam("password") String password,
@@ -82,6 +83,7 @@ public class WebClientController { //Clase con todo el redireccionamiento y cont
         return "entrenamiento";
     }
 
+    //CREAR ENTRENAMIENTO
     @PostMapping("/entrenamientos/crear")
     public String createTraining(@ModelAttribute("token") String token,
                                  @RequestParam("titulo") String titulo,
@@ -102,6 +104,7 @@ public class WebClientController { //Clase con todo el redireccionamiento y cont
         }
     }
 
+    // VER ENTRENAMIENTOS
     @GetMapping("/entrenamiento/ver") // Ruta actualizada
     public String showTrainings(Model model, @ModelAttribute("token") String token) {
         validateToken(token);
@@ -115,19 +118,23 @@ public class WebClientController { //Clase con todo el redireccionamiento y cont
         }
     }
 
-    @GetMapping("/ruta/ver") // Ruta actualizada
+    //VER RETOS
+    @GetMapping("/reto/ver") // Ruta actualizada
     public String showRetos(Model model, @ModelAttribute("token") String token) {
         validateToken(token);
         try {
             List<Reto> retos = restTemplateServiceProxy.obtenerRetosActivos(token);
-            model.addAttribute("retos", retos);
-            return "retos";
+            model.addAttribute("retosActivos", retos);
+            logger.info("Retos cargados con éxito");
+            logger.info( "Retos: " + retos.toString());
+            return "verRetos";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "No se pudieron cargar los retos: " + e.getMessage());
             return "home";
         }
     }
 
+    // LOGOUT
     public String logout(@ModelAttribute("token") String token, SessionStatus sessionStatus) {
         validateToken(token);
     	try {

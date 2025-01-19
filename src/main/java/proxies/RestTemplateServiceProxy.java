@@ -53,7 +53,7 @@ public class RestTemplateServiceProxy {
     }
         
     public void logout(String token) {
-        String url = apiBaseUrl + "/api/auth/logout";
+        String url = apiBaseUrl + "/api/auth/logout?Token=" + token;
         try {
             restTemplate.postForObject(url, token, Void.class);
         } catch (HttpStatusCodeException e) {
@@ -121,14 +121,10 @@ public class RestTemplateServiceProxy {
 	
 	 @SuppressWarnings("unchecked")
 	    public List<Reto> obtenerRetosActivos(String token) {
-	        String url = apiBaseUrl + "/api/retos/activos";
+	        String url = apiBaseUrl + "/api/retos/activos?Token=" + token;
 	        logger.info("URL: " + url);
 	        try {
-	            return restTemplate.getForObject(
-	                    url,
-	                    List.class,
-	                    token
-	            );
+	            return restTemplate.getForObject(url, List.class);
 	        } catch (HttpStatusCodeException e) {
 	            switch (e.getStatusCode().value()) {
 	                case 401 -> throw new RuntimeException("Token inválido");

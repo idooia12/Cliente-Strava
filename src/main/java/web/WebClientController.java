@@ -123,8 +123,10 @@ public class WebClientController { //Clase con todo el redireccionamiento y cont
     public String showRetos(Model model, @ModelAttribute("token") String token) {
         validateToken(token);
         try {
-            List<Reto> retos = restTemplateServiceProxy.obtenerRetosActivos(token);
-            model.addAttribute("retosActivos", retos);
+            List<Reto> retosActivos = restTemplateServiceProxy.obtenerRetosActivos(token);
+            model.addAttribute("retosActivos", retosActivos);
+            List<Reto> retosAceptados = restTemplateServiceProxy.consultarRetosAceptados(token);
+            model.addAttribute("retosAceptados", retosAceptados);
             return "verRetos";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "No se pudieron cargar los retos: " + e.getMessage());

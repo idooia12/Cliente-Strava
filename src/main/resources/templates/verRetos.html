@@ -49,6 +49,7 @@
 
     <!-- Main content -->
     <div class="container">
+        <!-- Retos Activos -->
         <h2 class="mb-4">Retos a los que puedes apuntarte</h2>
         <table class="table table-striped">
             <thead>
@@ -60,6 +61,7 @@
                     <th>Objetivo</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha de Fin</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 			<tbody>
@@ -81,7 +83,33 @@
 			        </td>
 			    </tr>
 			</tbody>
+        </table>
 
+        <!-- Retos Aceptados -->
+        <h2 class="mt-5 mb-4">Retos Aceptados</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Deporte</th>
+                    <th>Tipo de Reto</th>
+                    <th>Objetivo</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="reto, iterStat : ${retosAceptados}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${reto.nombre}"></td>
+                    <td th:text="${reto.deporte}"></td>
+                    <td th:text="${reto.tipoReto}"></td>
+                    <td th:text="${reto.objetivo}"></td>
+                    <td th:text="${reto.fechaInicio}"></td>
+                    <td th:text="${reto.fechaFin}"></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 

@@ -125,14 +125,32 @@ public class WebClientController { //Clase con todo el redireccionamiento y cont
         try {
             List<Reto> retos = restTemplateServiceProxy.obtenerRetosActivos(token);
             model.addAttribute("retosActivos", retos);
-            logger.info("Retos cargados con éxito");
-            logger.info( "Retos: " + retos.toString());
             return "verRetos";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "No se pudieron cargar los retos: " + e.getMessage());
             return "home";
         }
     }
+    
+    // ACEPTAR RETO
+    @SuppressWarnings("unchecked")
+    @PostMapping("/reto/aceptar")
+    public String aceptarReto(@ModelAttribute("token") String token,
+    						@RequestParam("retoNombre") String retoNombre, 
+                             Model model) {
+        try {
+            validateToken(token);
+            restTemplateServiceProxy.aceptarReto(token, retoNombre);
+            model.addAttribute("successMessage", "Reto aceptado exitosamente");
+            logger.info("Reto aceptado: "+ retoNombre);
+            return "redirect:/reto/ver";
+        } catch (RuntimeException e) {
+        	logger.error("Error al aceptar reto: {}", e.getMessage(), e);
+            model.addAttribute("errorMessage", "Error al aceptar el reto: " + e.getMessage());
+            return "redirect:/reto/ver";
+        }
+    }
+
 
     // LOGOUT
     public String logout(@ModelAttribute("token") String token, SessionStatus sessionStatus) {

@@ -135,10 +135,10 @@ public class RestTemplateServiceProxy {
 	    }
 	 
 	 public void aceptarReto(String token, String nombreReto) {
-	        String url = apiBaseUrl + "/api/retos/aceptar/" + nombreReto;
+	        String url = apiBaseUrl + "/api/retos/aceptar?Token=" + token + "&retoNombre=" + nombreReto;
 	        logger.info("URL: " + url);
 	        try {
-	            restTemplate.postForObject(url, token, Void.class);
+	            restTemplate.postForObject(url, null, String.class);
 	        } catch (HttpStatusCodeException e) {
 	            switch (e.getStatusCode().value()) {
 	                case 401 -> throw new RuntimeException("Token inválido");

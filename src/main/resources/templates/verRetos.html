@@ -62,17 +62,26 @@
                     <th>Fecha de Fin</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="reto, iterStat : ${retosActivos}">
-                    <td th:text="${iterStat.index + 1}"></td>
-                    <td th:text="${reto.nombre}"></td>
-                    <td th:text="${reto.deporte}"></td>
-                    <td th:text="${reto.tipoReto}"></td>
-                    <td th:text="${reto.objetivo}"></td>
-                    <td th:text="${reto.fechaInicio}"></td>
-                    <td th:text="${reto.fechaFin}"></td>
-                </tr>
-            </tbody>
+			<tbody>
+			    <tr th:each="reto, iterStat : ${retosActivos}">
+			        <td th:text="${iterStat.index + 1}"></td>
+			        <td th:text="${reto.nombre}"></td>
+			        <td th:text="${reto.deporte}"></td>
+			        <td th:text="${reto.tipoReto}"></td>
+			        <td th:text="${reto.objetivo}"></td>
+			        <td th:text="${reto.fechaInicio}"></td>
+			        <td th:text="${reto.fechaFin}"></td>
+			        <td>
+						<form th:action="@{/reto/aceptar}" method="post">
+						    <input type="hidden" name="retoNombre" th:value="${reto.nombre}" />
+						    <button type="submit" class="btn btn-success">
+						        <i class="fas fa-check"></i> Aceptar
+						    </button>
+						</form>
+			        </td>
+			    </tr>
+			</tbody>
+
         </table>
     </div>
 

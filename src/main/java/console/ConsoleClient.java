@@ -70,9 +70,9 @@ package console;
 	        }
 	    }
 
-	    public void crearEntrenamiento(String token, String titulo, String deporte, LocalDate fechaInicio, int duracion) {
+	    public void crearEntrenamiento(String token, String titulo, String deporte,int distancia, LocalDate fechaInicio, int duracion) {
 	        try {
-	        	proxyServicio.crearEntrenamiento(token, titulo, deporte, fechaInicio, duracion);
+	        	proxyServicio.crearEntrenamiento(token, titulo, deporte, distancia, fechaInicio, duracion);
 	            System.out.println("Entrenamiento creado con éxito.");
 	        } catch (RuntimeException e) {
 	            System.err.println("Error al crear el entrenamiento: " + e.getMessage());

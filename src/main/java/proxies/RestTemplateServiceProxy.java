@@ -7,6 +7,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -16,28 +18,28 @@ import data.*;
 @Service
 public class RestTemplateServiceProxy {
 	
-    private final RestTemplate restTemplate;
     /*
     @Value("${api.base.url}")
     private String apiBaseUrl; //Configurada en application.properties
     */
     private final String apiBaseUrl = "http://localhost:8082";
+    private final RestTemplate restTemplate;
     private static final Logger logger = LoggerFactory.getLogger(RestTemplateServiceProxy.class);
 
     public RestTemplateServiceProxy(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+ 
     
     
     //--> Authorization Controller
     
     public String login(String email, String password) {
        String url = apiBaseUrl + "/api/auth/login?Email=" + email + "&Password=" + password;
-
         logger.info("URL: " + url);
         try {
             String token = restTemplate.postForObject(url,null, String.class);
-            logger.info("Token recibido");
+            logger.info("Token: " + token);
             return token;
         } catch (HttpStatusCodeException e) {
             logger.error("Error al iniciar sesión: Código {}, Respuesta: {}", 
@@ -52,7 +54,6 @@ public class RestTemplateServiceProxy {
         
     public void logout(String token) {
         String url = apiBaseUrl + "/api/auth/logout";
-        
         try {
             restTemplate.postForObject(url, token, Void.class);
         } catch (HttpStatusCodeException e) {
@@ -68,7 +69,8 @@ public class RestTemplateServiceProxy {
     // --> Entrenamiento Controller
     @SuppressWarnings("unchecked")
 	public List<Entrenamiento> getAllEntrenamientos(String token) {
-        String url = apiBaseUrl + "/api/entrenamientos";
+        String url = apiBaseUrl + "/api/entrenamientos/listar?Token=" + token;
+        logger.info("URL: " + url);
         try {
             return restTemplate.getForObject(url, List.class);
         } catch (HttpStatusCodeException e) {
@@ -79,11 +81,11 @@ public class RestTemplateServiceProxy {
         }
     }
     
-	public void crearEntrenamiento(String token, String titulo, String deporte, LocalDate fechaInicio, int duracion) {
+	public void crearEntrenamiento(String token, String titulo, String deporte, int distancia, LocalDate fechaInicio, int duracion) {
 		String url = apiBaseUrl + "/api/entrenamientos/crear";
-
+        logger.info("URL: " + url);
 		try {
-            Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, fechaInicio, duracion);
+            Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, fechaInicio, duracion);
             restTemplate.postForObject(url, entrenamiento, Void.class);
         } catch (HttpStatusCodeException e) {
             switch (e.getStatusCode().value()) {
@@ -103,6 +105,7 @@ public class RestTemplateServiceProxy {
 	                 "&Fecha%20de%20Fin=" + fechaFin +
 	                 "&Objetivo%20del%20Reto=" + objetivo +
 	                 "&Deporte=" + deporte;
+        logger.info("URL: " + url);
 	    try {
 	        restTemplate.postForObject(url, token, Void.class);
 	    } catch (HttpStatusCodeException e) {
@@ -119,6 +122,7 @@ public class RestTemplateServiceProxy {
 	 @SuppressWarnings("unchecked")
 	    public List<Reto> obtenerRetosActivos(String token) {
 	        String url = apiBaseUrl + "/api/retos/activos";
+	        logger.info("URL: " + url);
 	        try {
 	            return restTemplate.getForObject(
 	                    url,
@@ -136,6 +140,7 @@ public class RestTemplateServiceProxy {
 	 
 	 public void aceptarReto(String token, String nombreReto) {
 	        String url = apiBaseUrl + "/api/retos/aceptar/" + nombreReto;
+	        logger.info("URL: " + url);
 	        try {
 	            restTemplate.postForObject(url, token, Void.class);
 	        } catch (HttpStatusCodeException e) {
@@ -150,6 +155,7 @@ public class RestTemplateServiceProxy {
 	 @SuppressWarnings("unchecked")
 	    public List<Reto> consultarRetosAceptados(String token) {
 	        String url = apiBaseUrl + "/api/retos/aceptados";
+	        logger.info("URL: " + url);
 	        try {
 	            return restTemplate.getForObject(
 	                    url,

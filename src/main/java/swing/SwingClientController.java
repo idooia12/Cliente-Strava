@@ -74,8 +74,8 @@ public class SwingClientController {
      * @param fechaInicio  Fecha de inicio.
      * @param duracion     Duración del entrenamiento en minutos.
      */
-    public void crearEntrenamiento(String titulo, String deporte, LocalDate fechaInicio, int duracion) {
-        serviceProxy.crearEntrenamiento(token, titulo, deporte, fechaInicio, duracion);
+    public void crearEntrenamiento(String titulo, String deporte, int distancia, LocalDate fechaInicio, int duracion) {
+        serviceProxy.crearEntrenamiento(token, titulo, deporte, distancia, fechaInicio, duracion);
     }
 
     /**
@@ -119,5 +119,6 @@ public class SwingClientController {
     }
     
 }
+
 
 

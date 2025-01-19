@@ -3,6 +3,8 @@ package web;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +21,11 @@ import proxies.RestTemplateServiceProxy;
 
 @Controller
 @SessionAttributes("token")
-public class WebClientController {
+public class WebClientController { //Clase con todo el redireccionamiento y control de la web. 
+	
+    private final RestTemplateServiceProxy restTemplateServiceProxy; //Se comunica con el restTemplateServiceProxy praa q este mande ejecutar los métodos en el servidor Strava.
+    private static final Logger logger = LoggerFactory.getLogger(WebClientController.class);
 
-    private final RestTemplateServiceProxy restTemplateServiceProxy;
 
     @Autowired
     public WebClientController(RestTemplateServiceProxy restTemplateServiceProxy) {
@@ -32,6 +36,14 @@ public class WebClientController {
     public String getToken() {
         return "";
     }
+    
+    private void validateToken(String token) {
+        if (token == null || token.isEmpty()) {
+        	logger.error("Token inválido o no proporcionado");
+            throw new RuntimeException("Token inválido o no proporcionado");
+        }
+    }
+
 
     @GetMapping("/")
     public String redirectToLogin() {
@@ -59,17 +71,14 @@ public class WebClientController {
 
     @GetMapping("/home")
     public String home(@ModelAttribute("token") String token, Model model) {
-        if (token == null || token.isEmpty()) {
-            return "redirect:/login";
-        }
+        validateToken(token);
         return "home";
     }
 
     @GetMapping("/entrenamientos/crear")
     public String getAllEntrenamientos(@ModelAttribute("token") String token, Model model) {
-        if (token == null || token.isEmpty()) {
-            return "redirect:/login";
-        }
+        validateToken(token);
+        logger.info("Redirecciona para crear entrenamiento");
         return "entrenamiento";
     }
 
@@ -81,14 +90,13 @@ public class WebClientController {
                                  @RequestParam("fecha_inicio") LocalDate fechaInicio,
                                  @RequestParam("duracion") int duracion,
                                  Model model) {
-        if (token == null || token.isEmpty()) {
-            return "redirect:/login";
-        }
-
+        validateToken(token);
         try {
-            restTemplateServiceProxy.crearEntrenamiento(token, titulo, deporte, fechaInicio, duracion);
+            restTemplateServiceProxy.crearEntrenamiento(token, titulo, deporte,distanciaKm, fechaInicio, duracion);
+            logger.info("Entrenamiento creado con éxito");
             return "redirect:/home";
         } catch (RuntimeException e) {
+            logger.error("Error al crear Entrenamiento: {}", e.getMessage(), e);
             model.addAttribute("errorMessage", "Error al crear el entrenamiento: " + e.getMessage());
             return "entrenamiento";
         }
@@ -96,10 +104,7 @@ public class WebClientController {
 
     @GetMapping("/entrenamiento/ver") // Ruta actualizada
     public String showTrainings(Model model, @ModelAttribute("token") String token) {
-        if (token == null || token.isEmpty()) {
-            return "redirect:/login";
-        }
-
+        validateToken(token);
         try {
             List<Entrenamiento> entrenamientos = restTemplateServiceProxy.getAllEntrenamientos(token);
             model.addAttribute("entrenamientos", entrenamientos);
@@ -112,10 +117,7 @@ public class WebClientController {
 
     @GetMapping("/ruta/ver") // Ruta actualizada
     public String showRetos(Model model, @ModelAttribute("token") String token) {
-        if (token == null || token.isEmpty()) {
-            return "redirect:/login";
-        }
-
+        validateToken(token);
         try {
             List<Reto> retos = restTemplateServiceProxy.obtenerRetosActivos(token);
             model.addAttribute("retos", retos);
@@ -126,11 +128,18 @@ public class WebClientController {
         }
     }
 
-    @GetMapping("/logout")
-    public String logout(SessionStatus sessionStatus) {
+    public String logout(@ModelAttribute("token") String token, SessionStatus sessionStatus) {
+        validateToken(token);
+    	try {
+            restTemplateServiceProxy.logout(token);
+        } catch (RuntimeException e) {
+            logger.warn("Error al cerrar sesión en el backend: {}", e.getMessage());
+        }
         sessionStatus.setComplete();
+        logger.info("Sesión cerrada con éxito");
         return "redirect:/login";
     }
+
 }
 
 

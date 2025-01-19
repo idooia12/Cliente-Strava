@@ -58,7 +58,7 @@
 
 <!-- Main content -->
 <div class="container">
-    <h2 class="mb-4">Crear Nuevo Reto</h2>
+    <h2 class="mb-4">Registrar Nuevo Reto</h2>
     <form th:action="@{/retos/crear}" method="post">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre del Reto</label>
@@ -73,8 +73,8 @@
             <input type="date" id="fechaFin" name="fechaFin" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="objetivo" class="form-label">Objetivo (Km o min)</label>
-            <input type="number" id="objetivo" name="objetivo" class="form-control" min="1" placeholder="Objetivo del reto" required>
+            <label for="objetivo" class="form-label">Objetivo</label>
+            <input type="number" id="objetivo" name="objetivo" class="form-control" min="1" placeholder="Objetivo en Km o min" required>
         </div>
         <div class="mb-3">
             <label for="deporte" class="form-label">Deporte</label>
@@ -85,7 +85,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary btn-custom">
-            <i class="fas fa-save me-2"></i> Crear Reto
+            <i class="fas fa-save me-2"></i> Guardar Reto
         </button>
     </form>
 </div>
